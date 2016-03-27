@@ -2,6 +2,7 @@ version: '2'
 services:
   bind:
     image: sameersbn/bind:latest
+    # https://localhost:10000/ user=root/pw=password
     ports:
       - "53:53/udp"
       - "10000:10000"
@@ -10,9 +11,13 @@ services:
     restart: always
 
   client:
-    image: ubuntu:14.04
+    build:
+      context: .
+      dockerfile: Dockerfile-client
+    dns: bind
   main:
     build: .
+    dns: bind
     ports:
       - "1234:80"
   appa:
